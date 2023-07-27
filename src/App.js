@@ -3,61 +3,48 @@ import { Component } from "react";
 
 class App extends Component {
   state = {
-    counter: 0,
-    posts: [
-      {
-        id: 1,
-        title: "title 1",
-        body: "corpo 1",
-      },
-      {
-        id: 2,
-        title: "title 2",
-        body: "corpo 2",
-      },
-      {
-        id: 3,
-        title: "title 3",
-        body: "corpo 3",
-      },
-    ],
+    posts: [],
   };
 
-  timeoutUpdate = null;
-
   componentDidMount() {
-    this.handleTimeout();
+    this.loadPosts();
   }
 
-  componentDidUpdate() {
-    clearTimeout(this.timeoutUpdate);
-    this.handleTimeout();
-  }
+  loadPosts = async () => {
+    const postsResponse = fetch("https://jsonplaceholder.typicode.com/posts");
 
-  componentWillUnmount() {
-    clearTimeout(this.timeoutUpdate);
-  }
+    const photosResponse = fetch("https://jsonplaceholder.typicode.com/photos");
 
-  handleTimeout = () => {
-    const { posts, counter } = this.state;
-    posts[0].title = "teste - 1";
-    this.timeoutUpdate = setTimeout(() => {
-      this.setState({ posts, counter: counter + 1 });
-    }, 1000);
+    const [posts, photos] = await Promise.all([postsResponse, photosResponse]);
+
+    const postsJson = await posts.json();
+    const photosJson = await photos.json();
+
+    const postsAndPhotos = postsJson.map((post, index) => {
+      return { ...post, cover: photosJson[index].url };
+    });
+
+    this.setState({ posts: postsAndPhotos });
   };
 
   render() {
+    const { posts } = this.state;
     return (
-      <div className="App">
-        <h1>{this.state.counter}</h1>
-        {this.state.posts.map((e, index) => {
-          return (
-            <div key={index}>
-              <p>{e.title}</p>
-            </div>
-          );
-        })}
-      </div>
+      <section className="container">
+        <div className="posts">
+          {posts.map((post, index) => {
+            return (
+              <div key={post.id} className="post">
+                <img src={post.cover} alt={post.title}></img>
+                <div className="post-content">
+                  <h1>{post.title}</h1>
+                  <p>{post.body}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     );
   }
 }
