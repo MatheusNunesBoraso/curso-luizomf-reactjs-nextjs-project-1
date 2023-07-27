@@ -1,65 +1,40 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { Component } from "react";
 
 class App extends Component {
   state = {
-    name: "Matheus Nunes",
-    counter: 0,
-  };
-
-  handleAClick = (event) => {
-    event.preventDefault();
-    const { counter } = this.state;
-    this.setState({ counter: counter + 1 });
-  };
-
-  handlePClick = () => {
-    this.setState({ name: "Samurai" });
-    console.log("Click in <p>");
+    posts: [
+      {
+        id: 1,
+        title: "title 1",
+        body: "corpo 1",
+      },
+      {
+        id: 2,
+        title: "title 2",
+        body: "corpo 2",
+      },
+      {
+        id: 3,
+        title: "title 3",
+        body: "corpo 3",
+      },
+    ],
   };
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p onClick={this.handlePClick}>{this.state.name}</p>
-          <a
-            onClick={this.handleAClick}
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Link
-          </a>
-          <p>{this.state.counter}</p>
-        </header>
+        {this.state.posts.map((e, index) => {
+          return (
+            <div key={index}>
+              <p>{e.title}</p>
+            </div>
+          );
+        })}
       </div>
     );
   }
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
 
 export default App;
