@@ -3,22 +3,38 @@ import "./App.css";
 import { Component } from "react";
 
 class App extends Component {
+  state = {
+    name: "Matheus Nunes",
+    counter: 0,
+  };
+
+  handleAClick = (event) => {
+    event.preventDefault();
+    const { counter } = this.state;
+    this.setState({ counter: counter + 1 });
+  };
+
+  handlePClick = () => {
+    this.setState({ name: "Samurai" });
+    console.log("Click in <p>");
+  };
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
+          <p onClick={this.handlePClick}>{this.state.name}</p>
           <a
+            onClick={this.handleAClick}
             className="App-link"
             href="https://reactjs.org"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn React
+            Link
           </a>
+          <p>{this.state.counter}</p>
         </header>
       </div>
     );
